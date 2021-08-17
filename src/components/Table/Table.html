@@ -2,17 +2,28 @@
     <thead>
         <tr>
             <th scope="col">Profile Image</th>
-            <th scope="col">Firsnamet</th>
-            <th scope="col">Lastname</th>
-            <th scope="col">Email</th>
-            <th scope="col">Sex</th>
-            <th scope="col">BirthDay</th>
-            <th scope="col">Actions</th>
+            <th scope="col" @click="sortByFirstname" v-if="!firstNameSorted"><i class="fas fa-angle-right"></i>Firstname</th>
+            <th scope="col" @click="sortByFirstname" v-else-if="firstNameSorted==='Asc'"><i class="fas fa-angle-down"></i>Firstname</th>
+            <th scope="col" @click="sortByFirstname" v-else-if="firstNameSorted==='Desc'"><i class="fas fa-angle-up"></i>Firstname</th>
+
+            <th scope="col" @click="sortByLastname" v-if="! lastNameSorted"><i class="fas fa-angle-right"></i>Lastname</th>
+            <th scope="col" @click="sortByLastname" v-else-if=" lastNameSorted==='Asc'"><i class="fas fa-angle-down"></i>Lastname</th>
+            <th scope="col" @click="sortByLastname" v-else-if=" lastNameSorted==='Desc'"><i class="fas fa-angle-up"></i>Lastname</th>
+            <th scope="col" @click="sortByEmail" v-if="!emailSorted"><i class="fas fa-angle-right"></i>Email</th>
+            <th scope="col" @click="sortByEmail" v-else-if="emailSorted==='Asc'"><i class="fas fa-angle-down"></i>Email</th>
+            <th scope="col" @click="sortByEmail" v-else-if="emailSorted==='Desc'"><i class="fas fa-angle-up "></i>Email</th>
+            <th scope="col " @click="sortBySex" v-if="!sexSorted"><i class="fas fa-angle-right"></i>Sex</th>
+            <th scope="col " @click="sortBySex" v-else-if="sexSorted==='Asc'"><i class="fas fa-angle-down"></i>Sex</th>
+            <th scope="col " @click="sortBySex" v-else><i class="fas fa-angle-up"></i>Sex</th>
+            <th scope="col " @click="sortByBirthDate" v-if="!birthDateSorted"><i class="fas fa-angle-right"></i>BirthDay</th>
+            <th scope="col " @click="sortByBirthDate" v-else-if="birthDateSorted==='Asc'"><i class="fas fa-angle-down"></i>BirthDay</th>
+            <th scope="col " @click="sortByBirthDate" v-else><i class="fas fa-angle-up"></i>BirthDay</th>
+            <th scope="col ">Actions</th>
         </tr>
     </thead>
     <tbody>
-        <tr v-for="employee in employees">
-            <th cope="row"><img class="circular-profile-image" :src="employee.value.profileImage" width="25" height="25"></th>
+        <tr v-for="employee in employees " :key="employee.id ">
+            <th scope="row "><img class="circular-profile-image " :src="employee.value.profileImage " width="25 " height="25 "></th>
             <td>{{employee.value.firstName}}</td>
             <td>{{employee.value.lastName}}</td>
             <td>{{employee.value.email}}</td>
