@@ -1,14 +1,17 @@
 <template>
   <Form></Form>
+  <Table></Table>
 </template>
 
 <script>
 import Form from "./components/Form";
+import Table from './components/Table/Table.vue';
 
 export default {
   name: 'App',
   components: {
-    Form
+    Form,
+    Table
   }
 }
 </script>
