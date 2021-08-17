@@ -1,30 +1,23 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th scope="col">Profile Image</th>
+            <th scope="col">Firsnamet</th>
+            <th scope="col">Lastname</th>
+            <th scope="col">Email</th>
+            <th scope="col">Sex</th>
+            <th scope="col">BirthDay</th>
+            <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
+        <tr v-for="employee in employees">
+            <th cope="row"><img class="circular-profile-image" :src="employee.value.profileImage" width="25" height="25"></th>
+            <td>{{employee.value.firstName}}</td>
+            <td>{{employee.value.lastName}}</td>
+            <td>{{employee.value.email}}</td>
+            <td>{{employee.value.sex}}</td>
+            <td>{{employee.value.dateOfBirth}}</td>
         </tr>
     </tbody>
 </table>

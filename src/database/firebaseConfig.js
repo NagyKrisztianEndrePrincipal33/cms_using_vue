@@ -2,6 +2,8 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/storage";
 
+import 'firebase/analytics';
+
 var firebaseConfig = {
     apiKey: "AIzaSyAzcm0C7N7__-vAHe0COrSCEO7Kcusdznw",
     authDomain: "contact-management-syste-a22c9.firebaseapp.com",
@@ -15,5 +17,4 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
-
-export default { firebase };
+export default firebase;
