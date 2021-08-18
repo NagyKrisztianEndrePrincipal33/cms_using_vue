@@ -1,10 +1,11 @@
 <template>
-  <Form></Form>
+  <Form v-show="formIsVisible" @close-form="closeForm"></Form>
   <Table></Table>
+  <button @click="showForm">Add new employee</button>
 </template>
 
 <script>
-import Form from "./components/Form";
+import Form from "./components/Form.vue";
 import Table from './components/Table/Table.vue';
 
 export default {
@@ -12,6 +13,19 @@ export default {
   components: {
     Form,
     Table
+  },
+  data(){
+    return{
+      formIsVisible:false,
+    }
+  },
+  methods:{
+    showForm(){
+      this.formIsVisible=true;
+    },
+    closeForm(){
+      this.formIsVisible = false;
+    }
   }
 }
 </script>
