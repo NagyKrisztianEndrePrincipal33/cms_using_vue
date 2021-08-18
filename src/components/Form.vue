@@ -10,36 +10,62 @@
             X
           </button>
         </header>
-        <p v-if="msg!==''">
-          <b>Please correct the following error: <i v-text="msg" class="error-message"></i></b>
+        <p v-if="msg !== ''">
+          <b
+            >Please correct the following error:
+            <i v-text="msg" class="error-message"></i
+          ></b>
         </p>
         <form @submit.prevent="submitForm">
           <div class="form">
             <div class="row-2">
               <div class="input-field">
-              <input type="text" v-model="firstName" required placeholder=" " />
-              <label>Firstname</label>
+                <input
+                  type="text"
+                  v-model="firstName"
+                  required
+                  placeholder=" "
+                />
+                <label>Firstname</label>
+              </div>
+              <div class="input-field">
+                <input
+                  type="text"
+                  v-model="lastName"
+                  required
+                  placeholder=" "
+                />
+                <label>Lastname</label>
+              </div>
             </div>
             <div class="input-field">
-              <input type="text" v-model="lastName" required placeholder=" " />
-              <label>Lastname</label>
-            </div>
-            
-            </div>
-            <div class="input-field">
-              <input type="email" v-model="email"  required placeholder=" " />
+              <input type="email" v-model="email" required placeholder=" " />
               <label>Email</label>
             </div>
             <div class="row-2">
               <div class="input-field with-select">
-                <select>
+                <select v-model="sex" :required="true">
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </select>
               </div>
               <div class="input-field">
-                <input type="date" v-model="dateOfBirth" :max="maxDate" required />
+                <input
+                  type="date"
+                  v-model="dateOfBirth"
+                  :max="maxDate"
+                  required
+                />
                 <label>Birth day</label>
+              </div>
+            </div>
+            <div class="image-part">
+              <div id="preview">
+                <img v-if="url" :src="url" width="45" height="45" />
+              </div>
+              <div class="input-field">
+                <input type="file" accept="image/*" @change="changeFile" />
+                <label>Profile Image</label>
               </div>
             </div>
             <button class="btn-subbmit">Submit</button>
@@ -67,46 +93,58 @@ export default {
       formName: "",
       firstName: "",
       lastName: "",
-      email:"",
-      dateOfBirth :"",
-      maxDate:"",
-      msg :"",
-      emailRegex : null,
-
+      email: "",
+      sex: "Male",
+      dateOfBirth: "",
+      maxDate: "",
+      msg: "",
+      emailRegex: null,
+      url: null,
     };
   },
-  watch:{
-  },
+  watch: {},
   methods: {
     closeForm() {
       this.$emit("close-form");
     },
-    submitForm(){
+    submitForm() {
       let textRegex = /^[A-Za-z]+$/;
-      if(!textRegex.test(this.firstName)){
+      if (!textRegex.test(this.firstName)) {
         this.msg = "The firstname should contain only alphanumeric characters!";
-        setTimeout(function(){
+        setTimeout(
+          function() {
             this.msg = "";
-        }.bind(this),3000);
+          }.bind(this),
+          3000
+        );
         return;
       }
-      if(!textRegex.test(this.lastName)){
+      if (!textRegex.test(this.lastName)) {
         this.msg = "The lastName should contain only alphanumeric characters!";
-        setTimeout(function(){
+        setTimeout(
+          function() {
             this.msg = "";
-        }.bind(this),3000);
+          }.bind(this),
+          3000
+        );
         return;
       }
       const validRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-       if(!validRegex.test(this.email)){
+      if (!validRegex.test(this.email)) {
         this.msg = "The email should be a real email!";
-        setTimeout(function(){
+        setTimeout(
+          function() {
             this.msg = "";
-        }.bind(this),3000);
+          }.bind(this),
+          3000
+        );
         return;
       }
-
-    }
+    },
+    changeFile(e) {
+      const file = e.target.files[0];
+      this.url = URL.createObjectURL(file);
+    },
   },
   beforeMount() {
     if (this.formType === "New") {
@@ -114,8 +152,8 @@ export default {
     } else {
       this.formName = "Edit an existing user:";
     }
-    let date = moment().subtract(16, 'years');
-    this.maxDate =  date.format("YYYY-MM-DD");
+    let date = moment().subtract(16, "years");
+    this.maxDate = date.format("YYYY-MM-DD");
   },
 };
 </script>
@@ -184,14 +222,14 @@ $modal-height: 80vh;
   font-weight: bold;
   color: #eee;
   background: transparent;
-  outline:none;
+  outline: none;
 }
 
-.btn-close:hover{
-  color:red;
+.btn-close:hover {
+  color: red;
 }
 
-.btn-close:focus{
+.btn-close:focus {
   outline: none;
 }
 
@@ -216,15 +254,15 @@ $modal-height: 80vh;
   // color: #eee;
 }
 
-.row-2{
+.row-2 {
   display: flex;
   justify-content: space-between;
-  gap:10px;
+  gap: 10px;
 }
 
 .input-field {
   margin: 20px 0 0 0;
-  width:100%;
+  width: 100%;
   position: relative;
   display: inline-block;
   label {
@@ -238,36 +276,36 @@ $modal-height: 80vh;
     transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
     opacity: 0.5;
     background: #15172b;
-    color:white
+    color: white;
   }
 
   input,
   select {
     padding: 10px;
-    background-color:#15172b;
-    width:100%;
-    border-radius:25px;
+    background-color: #15172b;
+    width: 100%;
+    border-radius: 25px;
     border: white 1px solid;
-    color:white;
+    color: white;
   }
 
-  select{
-    box-sizing:border-box;
-    height:46px;
+  select {
+    box-sizing: border-box;
+    height: 46px;
   }
 
-  select:focus{
-    outline:none;
+  select:focus {
+    outline: none;
   }
 
-  .with-select{
-    label{
+  .with-select {
+    label {
       opacity: 1;
-      transform:  scale(0.75) translateY(-70%) translateX(-14px);
+      transform: scale(0.75) translateY(-70%) translateX(-14px);
     }
   }
 
-  input:focus{
+  input:focus {
     outline: none;
   }
   input:focus + label,
@@ -275,27 +313,45 @@ $modal-height: 80vh;
     opacity: 1;
     transform: scale(0.75) translateY(-70%) translateX(-14px);
   }
-
- 
 }
 
- .btn-subbmit{
-    margin-top:20px;
-    padding:10px;
-    border-radius: 25px;
-    outline:none;
-    border:none;
-    min-width: 25%;
-    font-weight: bold;
-    transition: all 2s;
-  }
-
-  .btn-subbmit:hover{
-    background-color:rgb(17, 42, 121);
-    color:white;
-  }
-.error-message{
-  color:red;
+.btn-subbmit {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 25px;
+  outline: none;
+  border: none;
+  min-width: 25%;
+  font-weight: bold;
+  transition: all 2s;
 }
 
+.btn-subbmit:hover {
+  background-color: rgb(17, 42, 121);
+  color: white;
+}
+.error-message {
+  color: red;
+}
+.image-part{
+  display: flex;
+  align-items:center;
+}
+
+#preview {
+  margin-top:20px;
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#preview img {
+  max-width: 100%;
+  max-height: 500px;
+  width:50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 </style>
