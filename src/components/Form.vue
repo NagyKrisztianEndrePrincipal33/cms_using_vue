@@ -10,11 +10,8 @@
             X
           </button>
         </header>
-        <p v-if="msg">
-          <b>Please correct the following error(s):</b>
-          <ul>
-            <li v-for="value in msg" :key="value">{{value}}</li>
-          </ul>
+        <p v-if="msg!==''">
+          <b>Please correct the following error: <i v-text="msg" class="error-message"></i></b>
         </p>
         <form @submit.prevent="submitForm">
           <div class="form">
@@ -39,7 +36,6 @@
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </select>
-                <!-- <label>Sex</label> -->
               </div>
               <div class="input-field">
                 <input type="date" v-model="dateOfBirth" :max="maxDate" required />
@@ -74,32 +70,42 @@ export default {
       email:"",
       dateOfBirth :"",
       maxDate:"",
-      msg :{},
+      msg :"",
+      emailRegex : null,
+
     };
   },
   watch:{
-    firstName(value){
-      console.log(value);
-      console.log(this.msg);
-      this.firstName = value;
-      this.validateName(value,"FirstName");
-    },
   },
   methods: {
     closeForm() {
       this.$emit("close-form");
     },
-    validateName(value,nameType){
-      const textRegex = /^[a-zA-z ]*$/;
-      if(textRegex.test(value)||value===""){
-        this.msg[nameType]="";
-      }
-      else{
-        this.msg[nameType]=`The ${nameType} only can contain letters`;
-      }
-    },
     submitForm(){
-      
+      let textRegex = /^[A-Za-z]+$/;
+      if(!textRegex.test(this.firstName)){
+        this.msg = "The firstname should contain only alphanumeric characters!";
+        setTimeout(function(){
+            this.msg = "";
+        }.bind(this),3000);
+        return;
+      }
+      if(!textRegex.test(this.lastName)){
+        this.msg = "The lastName should contain only alphanumeric characters!";
+        setTimeout(function(){
+            this.msg = "";
+        }.bind(this),3000);
+        return;
+      }
+      const validRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+       if(!validRegex.test(this.email)){
+        this.msg = "The email should be a real email!";
+        setTimeout(function(){
+            this.msg = "";
+        }.bind(this),3000);
+        return;
+      }
+
     }
   },
   beforeMount() {
@@ -288,4 +294,8 @@ $modal-height: 80vh;
     background-color:rgb(17, 42, 121);
     color:white;
   }
+.error-message{
+  color:red;
+}
+
 </style>
