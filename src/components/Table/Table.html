@@ -22,13 +22,6 @@
         </tr>
     </thead>
     <tbody>
-        <tr v-for="employee in employees " :key="employee.id ">
-            <th scope="row "><img class="circular-profile-image " :src="employee.value.profileImage " width="25 " height="25 "></th>
-            <td>{{employee.value.firstName}}</td>
-            <td>{{employee.value.lastName}}</td>
-            <td>{{employee.value.email}}</td>
-            <td>{{employee.value.sex}}</td>
-            <td>{{employee.value.dateOfBirth}}</td>
-        </tr>
+        <Row v-for="employee in employees" :key="employee.id" :employee="employee"></Row>
     </tbody>
 </table>

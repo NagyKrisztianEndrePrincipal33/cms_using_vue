@@ -3,8 +3,12 @@
 <script>
 import "bootstrap/dist/css/bootstrap.min.css";
 import db from "../../database/database";
+import Row from "../Row.vue";
 export default {
   name: "Table",
+  components:{
+      Row,
+  },
   data() {
     return {
       employees: [],
