@@ -1,7 +1,6 @@
-<button @click="showForm" class="btn-new">Add new employee</button>
 <Form v-show="formIsVisible" @close-form="closeForm" @add-new-employee="newEmployee"></Form>
 <Form v-if="editFormIsVisible" @close-form="closeForm" :employee="seditEmployee" formType="Edit the employee" @edit-employee="editEmployeeBack"></Form>
-
+<div class="table-component-header"><button @click="showForm" class="btn-new"><i class="fas fa-user-plus new-user-icon"></i>Add new employee</button></div>
 <table class="table table-striped">
     <thead>
         <tr>

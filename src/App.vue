@@ -1,27 +1,25 @@
 <template>
   <Header headerText="Content management system"></Header>
-  <Table></Table>
+    <Table></Table>
 </template>
 
 <script>
-import Table from './components/Table/Table.vue';
-import Header from './components/Header.vue';
+import Table from "./components/Table/Table.vue";
+import Header from "./components/Header.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     Table,
     Header,
   },
-  data(){
-    return{
-      formIsVisible:false,
-    }
+  data() {
+    return {
+      formIsVisible: false,
+    };
   },
-  methods:{
-    
-  }
-}
+  methods: {},
+};
 </script>
 
 <style>
@@ -33,4 +31,5 @@ export default {
   color: #2c3e50;
   margin-top: 0;
 }
+
 </style>
