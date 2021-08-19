@@ -82,5 +82,9 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
     border:none;
     border-radius: 10px;
     box-shadow:1px 1px 10px rgba($color: #000000, $alpha: 0.5);
+    background-color:#15172b;
+    i{
+        color:white;
+    }
 }
 </style>
