@@ -60,8 +60,8 @@
               </div>
             </div>
             <div class="image-part">
-              <div id="preview">
-                <img v-if="url" :src="url" width="45" height="45" />
+              <div v-if="url" id="preview">
+                <img  :src="url" width="45" height="45" />
               </div>
               <div class="input-field">
                 <input type="file" accept="image/*" @change="changeFile" />
@@ -404,6 +404,9 @@ $modal-height: 80vh;
 .image-part {
   display: flex;
   align-items: center;
+  .input-field{
+    width:100%;
+  }
 }
 
 #preview {
@@ -412,6 +415,7 @@ $modal-height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
 }
 
 #preview img {
