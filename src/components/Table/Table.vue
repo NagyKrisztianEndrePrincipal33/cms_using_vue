@@ -45,6 +45,13 @@ export default {
       );
       this.employees[index]=tempObj;
     },
+    deleteEmployee(employee){
+        let index=this.employees.findIndex((oemployee)=>
+          oemployee.id===employee.id
+      );
+      console.log(index);
+      this.employees.splice(index,1);
+    },
     editEmployee(employee){
       this.seditEmployee = employee;
       this.editFormIsVisible = true;
