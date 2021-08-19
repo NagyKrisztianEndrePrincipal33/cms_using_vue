@@ -28,7 +28,7 @@
     <td>{{ employee.value.lastName }}</td>
     <td>{{ employee.value.email }}</td>
     <td>{{ employee.value.sex }}</td>
-    <td>{{ employee.value.dateOfBirth }}</td>
+    <td>{{ formatedDate }}</td>
     <td class="action-buttons">
       <button @click="editEmployee" class="btn-edit">
         <i class="fas fa-user-edit"></i>
@@ -42,6 +42,9 @@
 
 <script>
 import db from "../database/database";
+import moment from "moment";
+
+moment.locale("ro");
 
 export default {
   name: "Row",
@@ -51,7 +54,11 @@ export default {
       defaultImage:
         "https://th.bing.com/th/id/R.3767af5c322c568ff03e7ce15f627279?rik=qdJkz%2fubzVeGLw&pid=ImgRaw&r=0",
       showQuestionWindow: false,
+      formatedDate:"",
     };
+  },
+  beforeMount(){
+    this.formatedDate = moment(this.employee.value.dateOfBirth).format('LL');
   },
   props: {
     employee: {
