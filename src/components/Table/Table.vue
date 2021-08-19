@@ -4,10 +4,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import db from "../../database/database";
 import Row from "../Row.vue";
+import Form from "../Form.vue"
 export default {
   name: "Table",
   components:{
       Row,
+      Form,
   },
   data() {
     return {
@@ -17,6 +19,7 @@ export default {
       emailSorted: null,
       sexSorted: null,
       birthDateSorted: null,
+      formIsVisible: false,
     };
   },
   async created() {
@@ -31,6 +34,18 @@ export default {
         temp.value = doc.data();
         this.employees.push(temp);
       });
+    },
+    showForm(){
+      this.formIsVisible=true;
+    },
+    closeForm(){
+      this.formIsVisible = false;
+    },
+    newEmployee(data){
+      let temp = {};
+      temp.id = new Date();
+      temp.value = data;
+      this.employees.push(temp);
     },
     sortByFirstname() {
       let modifier = 1;

@@ -1,3 +1,6 @@
+<button @click="showForm">Add new employee</button>
+<Form v-show="formIsVisible" @close-form="closeForm" @add-new-employee="newEmployee"></Form>
+
 <table class="table table-striped">
     <thead>
         <tr>

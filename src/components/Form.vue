@@ -204,6 +204,11 @@ export default {
     resetForm(){
       this.file = null;
         this.url = null;
+      this.firstName= "";
+      this.lastName= "";
+      this.email= "";
+      this.sex= "Male";
+      this.dateOfBirth= "";
       this.$refs.theForm.reset();
     },
   },
