@@ -61,15 +61,29 @@
             </div>
             <div class="image-part">
               <div v-if="url" id="preview">
-                <img  :src="url" width="45" height="45" />
+                <img :src="url" width="45" height="45" />
               </div>
               <div class="input-field">
                 <input type="file" accept="image/*" @change="changeFile" />
                 <label>Profile Image</label>
               </div>
             </div>
-            <button class="btn-subbmit btn-reset" @click.prevent="resetForm">Reset</button>
-            <button class="btn-subbmit">Submit</button>
+            <button
+              v-if="isEditForm"
+              class="btn-subbmit btn-reset"
+              @click.prevent="closeForm"
+            >
+              Cancel
+            </button>
+            <button
+              v-else
+              class="btn-subbmit btn-reset"
+              @click.prevent="resetForm"
+            >
+              Reset
+            </button>
+            <button v-if="isEditForm" class="btn-subbmit">Edit</button>
+            <button v-else class="btn-subbmit">Submit</button>
           </div>
         </form>
       </div>
@@ -82,7 +96,7 @@ import db from "../database/database";
 import storage from "../database/storage";
 export default {
   name: "Form",
-  emits: ["close-form","add-new-employee"],
+  emits: ["close-form", "add-new-employee","edit-employee"],
   props: {
     formType: {
       type: String,
@@ -90,9 +104,35 @@ export default {
         return "New";
       },
     },
+    employee: {
+      type: Object,
+      validator: function(value) {
+        if (
+          !Object.keys(value).includes("id") ||
+          !Object.keys(value).includes("value")
+        ) {
+          return false;
+        }
+        value = value.value;
+        if (
+          !Object.keys(value).includes("firstName") ||
+          !Object.keys(value).includes("lastName") ||
+          !Object.keys(value).includes("sex") ||
+          !Object.keys(value).includes("dateOfBirth") ||
+          !Object.keys(value).includes("email")
+        ) {
+          return false;
+        }
+        return true;
+      },
+      default() {
+        return null;
+      },
+    },
   },
   data() {
     return {
+      isEditForm: false,
       formName: "",
       firstName: "",
       lastName: "",
@@ -145,24 +185,25 @@ export default {
         );
         return;
       }
-
-      const result = await db
-        .collection("employees")
-        .where("email", "==", this.email)
-        .get();
-      if (result.docs.length > 0) {
-        this.msg = "There already is an employee with this email!";
-        setTimeout(
-          function() {
-            this.msg = "";
-          }.bind(this),
-          3000
-        );
-        return;
+      if (!this.isEditForm) {
+        const result = await db
+          .collection("employees")
+          .where("email", "==", this.email)
+          .get();
+        if (result.docs.length > 0) {
+          this.msg = "There already is an employee with this email!";
+          setTimeout(
+            function() {
+              this.msg = "";
+            }.bind(this),
+            3000
+          );
+          return;
+        }
       }
 
       try {
-        if (this.url) {
+        if (this.url && this.file) {
           let storageRef = storage.ref("images/" + this.email);
           let snapShot = await storageRef.put(this.file);
           if (snapShot.state !== "success") {
@@ -178,12 +219,22 @@ export default {
           dateOfBirth: this.dateOfBirth,
           profileImage: this.url,
         };
-        let result = await db.collection("employees").add(newEmployee);
-        newEmployee.id= result.id;
-        this.resetForm();
-        console.log("Data Uploaded!");
-        this.addNewData(newEmployee);
-        this.closeForm();
+        if (this.isEditForm) {
+          await db
+            .collection("employees")
+            .doc(this.employee.id)
+            .set(newEmployee);
+          newEmployee.id = this.employee.id;
+          this.editData(newEmployee);
+          this.resetForm();
+          this.closeForm();
+        } else {
+          let result = await db.collection("employees").add(newEmployee);
+          newEmployee.id = result.id;
+          this.resetForm();
+          this.addNewData(newEmployee);
+          this.closeForm();
+        }
       } catch (error) {
         this.msg = error;
         setTimeout(
@@ -194,22 +245,26 @@ export default {
         );
       }
     },
-    addNewData(newEmployee){
-      this.$emit('add-new-employee',newEmployee);
+    editData(editedEmployee){
+      this.$emit('edit-employee',editedEmployee);
+    }
+    ,
+    addNewData(newEmployee) {
+      this.$emit("add-new-employee", newEmployee);
     },
     changeFile(e) {
       const file = e.target.files[0];
       this.file = file;
       this.url = URL.createObjectURL(file);
     },
-    resetForm(){
+    resetForm() {
       this.file = null;
-        this.url = null;
-      this.firstName= "";
-      this.lastName= "";
-      this.email= "";
-      this.sex= "Male";
-      this.dateOfBirth= "";
+      this.url = null;
+      this.firstName = "";
+      this.lastName = "";
+      this.email = "";
+      this.sex = "Male";
+      this.dateOfBirth = "";
       this.$refs.theForm.reset();
     },
   },
@@ -221,6 +276,15 @@ export default {
     }
     let date = moment().subtract(16, "years");
     this.maxDate = date.format("YYYY-MM-DD");
+    if (this.employee) {
+      this.firstName = this.employee.value.firstName;
+      this.lastName = this.employee.value.lastName;
+      this.email = this.employee.value.email;
+      this.dateOfBirth = this.employee.value.dateOfBirth;
+      this.sex = this.employee.value.sex;
+      this.url = this.employee.value.profileImage;
+      this.isEditForm = true;
+    }
   },
 };
 </script>
@@ -387,7 +451,7 @@ $modal-height: 80vh;
   padding: 10px;
   border-radius: 25px;
   outline: none;
-  margin-left:5px;
+  margin-left: 5px;
   margin-right: 5px;
   border: none;
   min-width: 25%;
@@ -405,8 +469,8 @@ $modal-height: 80vh;
 .image-part {
   display: flex;
   align-items: center;
-  .input-field{
-    width:100%;
+  .input-field {
+    width: 100%;
   }
 }
 
@@ -428,14 +492,14 @@ $modal-height: 80vh;
   object-fit: cover;
 }
 
-.btn-reset{
+.btn-reset {
   background-color: orangered;
   transition: 2s all;
-  color:white;
+  color: white;
 }
 
-.btn-reset:hover{
+.btn-reset:hover {
   background-color: red;
-  color:white;
+  color: white;
 }
 </style>

@@ -6,12 +6,14 @@
             <td>{{employee.value.email}}</td>
             <td>{{employee.value.sex}}</td>
             <td>{{employee.value.dateOfBirth}}</td>
+            <td><button @click="editEmployee"><i class="fas fa-user-edit"></i></button></td>
         </tr>
 </template>
 
 <script>
 export default {
     name:"Row",
+    emits: ["edit-employee"],
     data(){
         return{
             defaultImage:"https://th.bing.com/th/id/R.3767af5c322c568ff03e7ce15f627279?rik=qdJkz%2fubzVeGLw&pid=ImgRaw&r=0",
@@ -32,6 +34,11 @@ export default {
                 return true;
             }
         }
+    },
+    methods:{
+        editEmployee(){
+            this.$emit('edit-employee',this.employee);
+        }
     }
 }
 </script>
@@ -41,4 +48,9 @@ export default {
     border-radius: 50%;
     object-fit: cover;
     }
+    $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid"; // fas
+@import "~@fortawesome/fontawesome-free/scss/regular"; // far
+@import "~@fortawesome/fontawesome-free/scss/brands"; // fab
 </style>

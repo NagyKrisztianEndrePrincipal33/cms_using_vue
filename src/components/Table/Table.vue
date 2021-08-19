@@ -20,12 +20,35 @@ export default {
       sexSorted: null,
       birthDateSorted: null,
       formIsVisible: false,
+      editFormIsVisible:false,
+      seditEmployee:null,
     };
   },
   async created() {
     this.fetchData();
   },
   methods: {
+    editEmployeeBack(employee){
+      let tempObj={
+        id:employee.id,
+        value:{
+          firstName:employee.firstName,
+          lastName:employee.lastName,
+          sex:employee.sex,
+          dateOfBirth:employee.dateOfBirth,
+          profileImage:employee.profileImage,
+          email:employee.email,
+        },
+      };
+      let index=this.employees.findIndex((employee)=>
+          employee.id===tempObj.id
+      );
+      this.employees[index]=tempObj;
+    },
+    editEmployee(employee){
+      this.seditEmployee = employee;
+      this.editFormIsVisible = true;
+    },
     async fetchData() {
       let querrySnaphsot = await db.collection("employees").get();
       querrySnaphsot.forEach((doc) => {
@@ -40,6 +63,7 @@ export default {
     },
     closeForm(){
       this.formIsVisible = false;
+      this.editFormIsVisible = false;
     },
     newEmployee(data){
       let temp = {};
