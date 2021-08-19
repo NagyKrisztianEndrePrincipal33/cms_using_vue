@@ -16,7 +16,7 @@
             <i v-text="msg" class="error-message"></i
           ></b>
         </p>
-        <form @submit.prevent="submitForm">
+        <form @submit.prevent="submitForm" ref="theForm">
           <div class="form">
             <div class="row-2">
               <div class="input-field">
@@ -68,6 +68,7 @@
                 <label>Profile Image</label>
               </div>
             </div>
+            <button class="btn-subbmit btn-reset" @click.prevent="resetForm">Reset</button>
             <button class="btn-subbmit">Submit</button>
           </div>
         </form>
@@ -77,9 +78,11 @@
 </template>
 <script>
 import moment from "moment";
+import db from "../database/database";
+import storage from "../database/storage";
 export default {
   name: "Form",
-  emits: ["close-form"],
+  emits: ["close-form","add-new-employee"],
   props: {
     formType: {
       type: String,
@@ -100,14 +103,16 @@ export default {
       msg: "",
       emailRegex: null,
       url: null,
+      file: null,
     };
   },
   watch: {},
   methods: {
     closeForm() {
+      this.resetForm();
       this.$emit("close-form");
     },
-    submitForm() {
+    async submitForm() {
       let textRegex = /^[A-Za-z]+$/;
       if (!textRegex.test(this.firstName)) {
         this.msg = "The firstname should contain only alphanumeric characters!";
@@ -140,10 +145,66 @@ export default {
         );
         return;
       }
+
+      const result = await db
+        .collection("employees")
+        .where("email", "==", this.email)
+        .get();
+      if (result.docs.length > 0) {
+        this.msg = "There already is an employee with this email!";
+        setTimeout(
+          function() {
+            this.msg = "";
+          }.bind(this),
+          3000
+        );
+        return;
+      }
+
+      try {
+        if (this.url) {
+          let storageRef = storage.ref("images/" + this.email);
+          let snapShot = await storageRef.put(this.file);
+          if (snapShot.state !== "success") {
+            return;
+          }
+          this.url = await snapShot.ref.getDownloadURL();
+        }
+        let newEmployee = {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          email: this.email,
+          sex: this.sex,
+          dateOfBirth: this.dateOfBirth,
+          profileImage: this.url,
+        };
+        await db.collection("employees").add(newEmployee);
+        this.resetForm();
+        console.log("Data Uploaded!");
+        this.addNewData(newEmployee);
+        this.closeForm();
+      } catch (error) {
+        this.msg = error;
+        setTimeout(
+          function() {
+            this.msg = "";
+          }.bind(this),
+          3000
+        );
+      }
+    },
+    addNewData(newEmployee){
+      this.$emit('add-new-employee',newEmployee);
     },
     changeFile(e) {
       const file = e.target.files[0];
+      this.file = file;
       this.url = URL.createObjectURL(file);
+    },
+    resetForm(){
+      this.file = null;
+        this.url = null;
+      this.$refs.theForm.reset();
     },
   },
   beforeMount() {
@@ -320,6 +381,8 @@ $modal-height: 80vh;
   padding: 10px;
   border-radius: 25px;
   outline: none;
+  margin-left:5px;
+  margin-right: 5px;
   border: none;
   min-width: 25%;
   font-weight: bold;
@@ -333,13 +396,13 @@ $modal-height: 80vh;
 .error-message {
   color: red;
 }
-.image-part{
+.image-part {
   display: flex;
-  align-items:center;
+  align-items: center;
 }
 
 #preview {
-  margin-top:20px;
+  margin-top: 20px;
   margin-right: 10px;
   display: flex;
   justify-content: center;
@@ -349,9 +412,20 @@ $modal-height: 80vh;
 #preview img {
   max-width: 100%;
   max-height: 500px;
-  width:50px;
+  width: 50px;
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.btn-reset{
+  background-color: orangered;
+  transition: 2s all;
+  color:white;
+}
+
+.btn-reset:hover{
+  background-color: red;
+  color:white;
 }
 </style>

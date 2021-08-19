@@ -1,5 +1,5 @@
 <template>
-  <Form v-show="formIsVisible" @close-form="closeForm"></Form>
+  <Form v-show="formIsVisible" @close-form="closeForm" @add-new-employee="newEmployee"></Form>
   <Table></Table>
   <button @click="showForm">Add new employee</button>
 </template>
@@ -25,6 +25,9 @@ export default {
     },
     closeForm(){
       this.formIsVisible = false;
+    },
+    newEmployee(data){
+      console.log(data);
     }
   }
 }
