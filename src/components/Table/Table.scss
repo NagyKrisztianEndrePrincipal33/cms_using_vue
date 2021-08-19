@@ -3,3 +3,16 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~@fortawesome/fontawesome-free/scss/solid"; // fas
 @import "~@fortawesome/fontawesome-free/scss/regular"; // far
 @import "~@fortawesome/fontawesome-free/scss/brands"; // fab
+.btn-new {
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-weight: bold;
+    box-shadow: 1px 2px 20 px rgba(0, 0, 0, 0.5);
+    transition: all 1s;
+}
+
+.btn-new:hover {
+    background-color: rgb(17, 42, 121);
+    color: white;
+}
