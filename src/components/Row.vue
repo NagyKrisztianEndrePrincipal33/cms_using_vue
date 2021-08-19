@@ -1,6 +1,6 @@
 <template>
         <tr>
-            <th scope="row"><img class="circular-profile-image " :src="employee.value.profileImage!=='' ? employee.value.profileImage : defaultImage " width="25 " height="25 "></th>
+            <th scope="row"><img class="circular-profile-image " :src="employee.value.profileImage!==null ? employee.value.profileImage : defaultImage " width="25 " height="25 "></th>
             <td>{{employee.value.firstName}}</td>
             <td>{{employee.value.lastName}}</td>
             <td>{{employee.value.email}}</td>
@@ -14,7 +14,7 @@ export default {
     name:"Row",
     data(){
         return{
-            defaultImage:"https://th.bing.com/th/id/R.c7f96e6c1bc28aabc4586815ce30e2ae?rik=MWNj1NeNfEYWgQ&pid=ImgRaw&r=0"
+            defaultImage:"https://th.bing.com/th/id/R.3767af5c322c568ff03e7ce15f627279?rik=qdJkz%2fubzVeGLw&pid=ImgRaw&r=0",
         }
     },
     props:{

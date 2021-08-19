@@ -43,7 +43,7 @@ export default {
     },
     newEmployee(data){
       let temp = {};
-      temp.id = new Date();
+      temp.id = data.id;
       temp.value = data;
       this.employees.push(temp);
     },

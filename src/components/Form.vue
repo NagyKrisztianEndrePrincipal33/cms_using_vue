@@ -178,7 +178,8 @@ export default {
           dateOfBirth: this.dateOfBirth,
           profileImage: this.url,
         };
-        await db.collection("employees").add(newEmployee);
+        let result = await db.collection("employees").add(newEmployee);
+        newEmployee.id= result.id;
         this.resetForm();
         console.log("Data Uploaded!");
         this.addNewData(newEmployee);
