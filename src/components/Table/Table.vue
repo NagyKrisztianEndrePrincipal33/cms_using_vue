@@ -70,14 +70,19 @@ export default {
       let index = this.employees.findIndex(
         (employee) => employee.id === tempObj.id
       );
+      let index2 =  this.backupData.findIndex((employee) => employee.id === tempObj.id);
+      this.backupData[index2] = tempObj;
       this.employees[index] = tempObj;
     },
     deleteEmployee(employee) {
       let index = this.employees.findIndex(
         (oemployee) => oemployee.id === employee.id
       );
-      console.log(index);
       this.employees.splice(index, 1);
+      let index2 = this.backupData.findIndex(
+        (oemployee) => oemployee.id === employee.id
+      );
+      this.backupData.splice(index2,1);
     },
     editEmployee(employee) {
       this.seditEmployee = employee;
@@ -103,7 +108,11 @@ export default {
       let temp = {};
       temp.id = data.id;
       temp.value = data;
-      this.employees.push(temp);
+      this.backupData.push(temp);
+      if(this.searchText.length>3){
+        let temp2 = Object.assign({},temp);
+        this.employees.push(temp2);
+      }
     },
     sortByFirstname() {
       let modifier = 1;
