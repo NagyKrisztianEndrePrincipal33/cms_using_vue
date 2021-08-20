@@ -8,9 +8,9 @@ import Form from "../Form.vue";
 import moment from "moment";
 export default {
   name: "Table",
-  components:{
-      Row,
-      Form,
+  components: {
+    Row,
+    Form,
   },
   data() {
     return {
@@ -21,39 +21,65 @@ export default {
       sexSorted: null,
       birthDateSorted: null,
       formIsVisible: false,
-      editFormIsVisible:false,
-      seditEmployee:null,
+      editFormIsVisible: false,
+      seditEmployee: null,
+      searchText: "",
+      backupData: [],
     };
   },
   async created() {
-    this.fetchData();
+    await this.fetchData();
+    this.backupData = this.employees;
+  },
+  watch: {
+    searchText(value) {
+      if(value.length>=3){
+      this.employees = this.backupData;
+      let tempData = this.employees;
+      let filteredData = [];
+      for (let x of tempData) {
+        let tempText = x.value;
+        if (
+          tempText.email.includes(value) ||
+          tempText.firstName.includes(value) ||
+          tempText.lastName.includes(value)
+        ) {
+          filteredData.push(x);
+        }
+      }
+      this.employees = filteredData;
+      }
+      else{
+        this.employees = this.backupData;
+      }
+    },
   },
   methods: {
-    editEmployeeBack(employee){
-      let tempObj={
-        id:employee.id,
-        value:{
-          firstName:employee.firstName,
-          lastName:employee.lastName,
-          sex:employee.sex,
-          dateOfBirth:employee.dateOfBirth,
-          profileImage:employee.profileImage,
-          email:employee.email,
+    editEmployeeBack(employee) {
+      let tempObj = {
+        id: employee.id,
+        value: {
+          firstName: employee.firstName,
+          lastName: employee.lastName,
+          sex: employee.sex,
+          dateOfBirth: employee.dateOfBirth,
+          profileImage: employee.profileImage,
+          email: employee.email,
         },
       };
-      let index=this.employees.findIndex((employee)=>
-          employee.id===tempObj.id
+      let index = this.employees.findIndex(
+        (employee) => employee.id === tempObj.id
       );
-      this.employees[index]=tempObj;
+      this.employees[index] = tempObj;
     },
-    deleteEmployee(employee){
-        let index=this.employees.findIndex((oemployee)=>
-          oemployee.id===employee.id
+    deleteEmployee(employee) {
+      let index = this.employees.findIndex(
+        (oemployee) => oemployee.id === employee.id
       );
       console.log(index);
-      this.employees.splice(index,1);
+      this.employees.splice(index, 1);
     },
-    editEmployee(employee){
+    editEmployee(employee) {
       this.seditEmployee = employee;
       this.editFormIsVisible = true;
     },
@@ -66,14 +92,14 @@ export default {
         this.employees.push(temp);
       });
     },
-    showForm(){
-      this.formIsVisible=true;
+    showForm() {
+      this.formIsVisible = true;
     },
-    closeForm(){
+    closeForm() {
       this.formIsVisible = false;
       this.editFormIsVisible = false;
     },
-    newEmployee(data){
+    newEmployee(data) {
       let temp = {};
       temp.id = data.id;
       temp.value = data;
@@ -160,14 +186,12 @@ export default {
           this.birthDateSorted = "Asc";
         }
       }
-      //TODO: Sorting with moment
       this.employees.sort((a, b) => {
-        if(moment(a.value.dateOfBirth).isAfter(b.value.dateOfBirth)){
- return modifier * 1;
+        if (moment(a.value.dateOfBirth).isAfter(b.value.dateOfBirth)) {
+          return modifier * 1;
+        } else {
+          return modifier * -1;
         }
-         else{
-            return modifier * -1;
-         }
       });
     },
   },

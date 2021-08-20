@@ -1,6 +1,11 @@
 <Form v-show="formIsVisible" @close-form="closeForm" @add-new-employee="newEmployee"></Form>
 <Form v-if="editFormIsVisible" @close-form="closeForm" :employee="seditEmployee" formType="Edit the employee" @edit-employee="editEmployeeBack"></Form>
-<div class="table-component-header"><button @click="showForm" class="btn-new"><i class="fas fa-user-plus new-user-icon"></i>Add new employee</button></div>
+<div class="table-component-header"><button @click="showForm" class="btn-new"><i class="fas fa-user-plus new-user-icon"></i>Add new employee</button>
+    <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input class="search-input" type="text" v-model="searchText">
+    </div>
+</div>
 <table class="table table-striped">
     <thead>
         <tr>
