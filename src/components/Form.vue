@@ -502,4 +502,7 @@ $modal-height: 80vh;
   background-color: red;
   color: white;
 }
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
 </style>
