@@ -4,7 +4,8 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import db from "../../database/database";
 import Row from "../Row.vue";
-import Form from "../Form.vue"
+import Form from "../Form.vue";
+import moment from "moment";
 export default {
   name: "Table",
   components:{
@@ -92,11 +93,7 @@ export default {
         }
       }
       this.employees.sort((a, b) => {
-        if (a.value.firstName < b.value.firstName) {
-          return modifier * 1;
-        } else {
-          return modifier * -1;
-        }
+        return modifier * a.value.firstName.localeCompare(b.value.firstName);
       });
     },
     sortByLastname() {
@@ -113,11 +110,7 @@ export default {
         }
       }
       this.employees.sort((a, b) => {
-        if (a.value.lastName < b.value.lastName) {
-          return modifier * 1;
-        } else {
-          return modifier * -1;
-        }
+        return modifier * a.value.lastName.localeCompare(b.value.lastName);
       });
     },
     sortByEmail() {
@@ -134,11 +127,7 @@ export default {
         }
       }
       this.employees.sort((a, b) => {
-        if (a.value.email < b.value.email) {
-          return modifier * 1;
-        } else {
-          return modifier * -1;
-        }
+        return modifier * a.value.email.localeCompare(b.value.email);
       });
     },
     sortBySex() {
@@ -155,11 +144,7 @@ export default {
         }
       }
       this.employees.sort((a, b) => {
-        if (a.value.sex < b.value.sex) {
-          return modifier * 1;
-        } else {
-          return modifier * -1;
-        }
+        return modifier * a.value.sex.localeCompare(b.value.sex);
       });
     },
     sortByBirthDate() {
@@ -177,12 +162,12 @@ export default {
       }
       //TODO: Sorting with moment
       this.employees.sort((a, b) => {
-          console.log(a.value);
-        if (a.value.dateOfBirth < b.value.dateOfBirth) {
-          return modifier * 1;
-        } else {
-          return modifier * -1;
+        if(moment(a.value.dateOfBirth).isAfter(b.value.dateOfBirth)){
+ return modifier * 1;
         }
+         else{
+            return modifier * -1;
+         }
       });
     },
   },
